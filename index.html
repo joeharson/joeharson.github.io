@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santhiya Joe Harson J - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Dark Blue-Gray */
+            color: #F3F4F6; /* Light Gray */
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #60A5FA, #A78BFA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-effect">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-wider">
+                <a href="#" class="text-gradient">JOE HARSON</a>
+            </h1>
+            <nav class="hidden md:flex space-x-8 items-center">
+                <a href="#about" class="hover:text-blue-400 transition-colors duration-300">About</a>
+                <a href="#projects" class="hover:text-blue-400 transition-colors duration-300">Projects</a>
+                <a href="#contact" class="hover:text-blue-400 transition-colors duration-300">Contact</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                 <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#about" class="block py-2 hover:text-blue-400">About</a>
+            <a href="#projects" class="block py-2 hover:text-blue-400">Projects</a>
+            <a href="#contact" class="block py-2 hover:text-blue-400">Contact</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 pt-24">
+
+        <!-- Hero Section -->
+        <section id="home" class="min-h-[80vh] flex flex-col-reverse md:flex-row items-center justify-center text-center md:text-left">
+            <div class="md:w-1/2 space-y-6">
+                <h2 class="text-4xl md:text-6xl font-bold tracking-tight">
+                    Hi, I'm <span class="text-gradient">Santhiya Joe Harson J</span>
+                </h2>
+                <p class="text-lg md:text-xl text-gray-300">
+                    An AI Enthusiast and Developer passionate about building intelligent solutions that make an impact.
+                </p>
+                <div class="flex justify-center md:justify-start space-x-4 pt-4">
+                    <a href="https://github.com/joeharson" target="_blank" class="p-3 bg-gray-700 rounded-full hover:bg-blue-500 transition-all duration-300 transform hover:scale-110">
+                        <i data-lucide="github" class="w-6 h-6"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/santhiya-joe-harson-j-41602a291" target="_blank" class="p-3 bg-gray-700 rounded-full hover:bg-blue-500 transition-all duration-300 transform hover:scale-110">
+                        <i data-lucide="linkedin" class="w-6 h-6"></i>
+                    </a>
+                    <a href="mailto:joeharsonj18@gmail.com" class="p-3 bg-gray-700 rounded-full hover:bg-blue-500 transition-all duration-300 transform hover:scale-110">
+                         <i data-lucide="mail" class="w-6 h-6"></i>
+                    </a>
+                </div>
+            </div>
+             <div class="md:w-1/2 flex justify-center p-8">
+                
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="py-20">
+            <div class="max-w-4xl mx-auto glass-effect rounded-2xl p-8 md:p-12">
+                <h3 class="text-3xl font-bold text-center mb-8 text-gradient">About Me</h3>
+                <p class="text-gray-300 leading-relaxed text-left md:text-lg">
+                    AI has always fascinated me, and I am deeply curious about every part of it—from Machine Learning and Deep Learning to Computer Vision, Natural Language Processing, and Generative AI. I love exploring technology, pushing boundaries, and creating solutions that can make a meaningful difference.
+                </p>
+                <br>
+                <p class="text-gray-300 leading-relaxed text-left md:text-lg">
+                    I’m also passionate about leadership and collaboration. Being open-minded and approachable, I enjoy working with teams, sharing knowledge, and learning from others’ perspectives. I believe that great ideas come from both innovation and teamwork.
+                </p>
+                <br>
+                <p class="text-gray-300 leading-relaxed text-left md:text-lg">
+                    Technology isn’t just a career for me—it’s a space to experiment, learn, and grow. I constantly seek challenges that let me explore new AI advancements, implement creative solutions, and contribute to projects that inspire progress. I aim to combine my technical skills, curiosity, and leadership to make a positive impact in the world of AI and beyond.
+                </p>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-20">
+            <h3 class="text-3xl font-bold text-center mb-12 text-gradient">My Projects</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project Card 1 -->
+                <div class="glass-effect rounded-xl overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                    <div class="p-6 flex-grow">
+                        <h4 class="font-bold text-xl mb-2">Sign Language Detection</h4>
+                        <p class="text-gray-400 text-base flex-grow">A computer vision project to recognize and translate sign language gestures in real-time.</p>
+                    </div>
+                    <div class="p-6 pt-0">
+                         <a href="https://github.com/joeharson/sign-language-detection-S4" target="_blank" class="inline-flex items-center font-semibold text-blue-400 hover:text-blue-300">
+                            View on GitHub <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="glass-effect rounded-xl overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                    <div class="p-6 flex-grow">
+                        <h4 class="font-bold text-xl mb-2">SOUNDFLOW AI</h4>
+                        <p class="text-gray-400 text-base flex-grow">An AI-powered application for sound analysis and processing.</p>
+                    </div>
+                     <div class="p-6 pt-0">
+                         <a href="https://github.com/joeharson/SOUNDFLOW-AI" target="_blank" class="inline-flex items-center font-semibold text-blue-400 hover:text-blue-300">
+                            View on GitHub <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="glass-effect rounded-xl overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                    <div class="p-6 flex-grow">
+                        <h4 class="font-bold text-xl mb-2">KCT Chatbot</h4>
+                        <p class="text-gray-400 text-base flex-grow">A conversational AI chatbot developed for Kumaraguru College of Technology.</p>
+                    </div>
+                     <div class="p-6 pt-0">
+                         <a href="https://github.com/joeharson/kct-chatbot" target="_blank" class="inline-flex items-center font-semibold text-blue-400 hover:text-blue-300">
+                           View on GitHub <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project Card 4 -->
+                <div class="glass-effect rounded-xl overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                    <div class="p-6 flex-grow">
+                        <h4 class="font-bold text-xl mb-2">GIE Rubrics for Forge Analytic</h4>
+                        <p class="text-gray-400 text-base flex-grow">A rubric system for the Forge Analytic Platform to standardize evaluations.</p>
+                    </div>
+                     <div class="p-6 pt-0">
+                         <a href="https://github.com/joeharson/forge-project-1" target="_blank" class="inline-flex items-center font-semibold text-blue-400 hover:text-blue-300">
+                            View on GitHub <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project Card 5 -->
+                <div class="glass-effect rounded-xl overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                    <div class="p-6 flex-grow">
+                        <h4 class="font-bold text-xl mb-2">Smart Recruitment Platform</h4>
+                        <p class="text-gray-400 text-base flex-grow">An intelligent platform to streamline and automate the recruitment process.</p>
+                    </div>
+                     <div class="p-6 pt-0">
+                         <a href="https://github.com/joeharson/SmartRecruitment" target="_blank" class="inline-flex items-center font-semibold text-blue-400 hover:text-blue-300">
+                            View on GitHub <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project Card 6 -->
+                <div class="glass-effect rounded-xl overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                    <div class="p-6 flex-grow">
+                        <h4 class="font-bold text-xl mb-2">Rideable</h4>
+                        <p class="text-gray-400 text-base flex-grow">A ride-sharing or transportation-focused application project.</p>
+                    </div>
+                     <div class="p-6 pt-0">
+                         <a href="https://github.com/joeharson/Rideable" target="_blank" class="inline-flex items-center font-semibold text-blue-400 hover:text-blue-300">
+                            View on GitHub <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="border-t border-gray-800">
+        <div class="container mx-auto px-6 py-12 text-center">
+            <h3 class="text-2xl font-bold mb-4">Get In Touch</h3>
+            <p class="text-gray-400 mb-6">
+                Feel free to reach out for collaborations or just a friendly hello!
+            </p>
+            <a href="mailto:joeharsonj18@gmail.com" class="inline-block bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors duration-300">
+                joeharsonj18@gmail.com
+            </a>
+            <div class="flex justify-center space-x-4 mt-8">
+                <a href="https://github.com/joeharson" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-300">
+                    <i data-lucide="github" class="w-6 h-6"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/santhiya-joe-harson-j-41602a291" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-300">
+                    <i data-lucide="linkedin" class="w-6 h-6"></i>
+                </a>
+            </div>
+            <p class="text-gray-500 text-sm mt-8">&copy; 2024 Santhiya Joe Harson J. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                // Close mobile menu on click
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
