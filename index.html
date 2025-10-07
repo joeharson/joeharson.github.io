@@ -303,21 +303,13 @@
                          <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="sparkles" class="w-10 h-10 text-cyan-400"></i></div>
                         <span class="font-medium">Generative AI</span>
                     </div>
-                     <div class="flex flex-col items-center gap-3 text-slate-300 hover:text-white transform hover:scale-110 transition-all duration-300">
-                         <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="code" class="w-10 h-10 text-cyan-400"></i></div>
-                        <span class="font-medium">Python</span>
-                    </div>
-                     <div class="flex flex-col items-center gap-3 text-slate-300 hover:text-white transform hover:scale-110 transition-all duration-300">
-                         <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="box" class="w-10 h-10 text-cyan-400"></i></div>
-                        <span class="font-medium">TensorFlow</span>
-                    </div>
                     <div class="flex flex-col items-center gap-3 text-slate-300 hover:text-white transform hover:scale-110 transition-all duration-300">
                          <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="database" class="w-10 h-10 text-cyan-400"></i></div>
                         <span class="font-medium">Data Analytics</span>
                     </div>
                     <div class="flex flex-col items-center gap-3 text-slate-300 hover:text-white transform hover:scale-110 transition-all duration-300">
-                         <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="users" class="w-10 h-10 text-cyan-400"></i></div>
-                        <span class="font-medium">Team Leadership</span>
+                         <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="network" class="w-10 h-10 text-cyan-400"></i></div>
+                        <span class="font-medium">Project Leadership</span>
                     </div>
                     <div class="flex flex-col items-center gap-3 text-slate-300 hover:text-white transform hover:scale-110 transition-all duration-300">
                          <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="mic" class="w-10 h-10 text-cyan-400"></i></div>
@@ -327,7 +319,7 @@
             </section>
 
             <!-- Projects Section -->
-            <section id="projects" class="py-24 scroll-reveal">
+            <section id="projects" class="pt-24 scroll-reveal">
                 <h3 class="text-4xl font-bold text-center mb-16 text-gradient">My Projects</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Project Card Template -->
@@ -408,15 +400,16 @@
                     <!-- Project Card 5 -->
                     <div class="card-bg rounded-xl overflow-hidden card-glow flex flex-col group">
                         <div class="p-6 flex-grow">
-                            <h4 class="font-bold text-xl mb-3 text-slate-200">Smart Recruitment Platform</h4>
-                            <p class="text-slate-400 text-sm flex-grow">An intelligent platform to streamline and automate the recruitment process.</p>
+                            <h4 class="font-bold text-xl mb-3 text-slate-200">Mudras in Bharatiya Natya</h4>
+                            <p class="text-slate-400 text-sm flex-grow">A deep learning model to recognize and classify hand gestures (Mudras) in classical Indian dance forms.</p>
                         </div>
                         <div class="px-6 py-4">
                             <div class="flex flex-wrap gap-2 text-xs mb-4">
-                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">AI Platform</span>
-                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">HR Tech</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">Computer Vision</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">Cultural Tech</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">PyTorch</span>
                             </div>
-                            <a href="https://github.com/joeharson/SmartRecruitment" target="_blank" class="inline-flex items-center font-semibold text-sm text-cyan-400 hover:text-cyan-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <a href="https://github.com/joeharson/Mudras-in-Bharatiya-Natya-Forms" target="_blank" class="inline-flex items-center font-semibold text-sm text-cyan-400 hover:text-cyan-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 View on GitHub <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                             </a>
                         </div>
@@ -439,12 +432,41 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- "View More" Button and Hidden Projects -->
+                <div id="more-projects-wrapper" class="text-center mt-16">
+                    <button id="view-more-btn" class="px-8 py-3 button-gradient text-black font-semibold rounded-lg shadow-[0_0_20px_rgba(0,229,255,0.3)] hover:shadow-[0_0_30px_rgba(0,229,255,0.5)] transition-all duration-300 transform hover:scale-105">
+                        View More Projects
+                    </button>
+                </div>
+
+                <div id="hidden-projects" class="hidden grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 transition-opacity duration-700 ease-in-out">
+                    <!-- Smart Recruitment Project -->
+                    <div class="card-bg rounded-xl overflow-hidden card-glow flex flex-col group">
+                        <div class="p-6 flex-grow">
+                            <h4 class="font-bold text-xl mb-3 text-slate-200">Smart Recruitment Platform</h4>
+                            <p class="text-slate-400 text-sm flex-grow">An intelligent platform to streamline and automate the recruitment process using NLP.</p>
+                        </div>
+                        <div class="px-6 py-4">
+                            <div class="flex flex-wrap gap-2 text-xs mb-4">
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">AI Platform</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">HR Tech</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">NLP</span>
+                            </div>
+                            <a href="https://github.com/joeharson/SmartRecruitment" target="_blank" class="inline-flex items-center font-semibold text-sm text-cyan-400 hover:text-cyan-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                View on GitHub <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Add more hidden projects here if needed -->
+                </div>
+
             </section>
 
         </main>
 
         <!-- Footer -->
-        <footer id="contact" class="border-t border-slate-800 scroll-reveal">
+        <footer id="contact" class="border-t scroll-reveal" style="border-color: var(--border-color);">
             <div class="container mx-auto px-6 py-20 text-center">
                 <h3 class="text-4xl font-bold mb-4 text-gradient">Let's Build Together</h3>
                 <p class="text-slate-400 mb-8 max-w-xl mx-auto">
@@ -662,7 +684,20 @@
                 backToTopButton.classList.remove('show');
             }
         });
+
+        // --- VIEW MORE PROJECTS ---
+        const viewMoreBtn = document.getElementById('view-more-btn');
+        const hiddenProjectsContainer = document.getElementById('hidden-projects');
+        const moreProjectsWrapper = document.getElementById('more-projects-wrapper');
+
+        viewMoreBtn.addEventListener('click', () => {
+            hiddenProjectsContainer.classList.remove('hidden');
+            hiddenProjectsContainer.style.display = 'grid'; 
+            moreProjectsWrapper.style.display = 'none'; // Hide the button's wrapper
+        });
     </script>
 </body>
 </html>
+
+
 
