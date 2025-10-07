@@ -76,6 +76,7 @@
             transform: translate(-50%, -50%);
             opacity: 0;
             transition: opacity 0.5s ease;
+            pointer-events: none; /* This is the fix: It allows clicks to pass through the effect */
         }
         .card-glow:hover::before {
             opacity: 1;
@@ -203,7 +204,7 @@
                     <a href="#contact" class="text-gray-400 hover:text-white transition-colors duration-300">Contact</a>
                 </nav>
                 <button id="mobile-menu-button" class="md:hidden focus:outline-none text-white">
-                     <i data-lucide="menu" class="w-6 h-6"></i>
+                      <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
             </div>
             <!-- Mobile Menu -->
@@ -241,8 +242,8 @@
                 <div class="max-w-5xl mx-auto text-center">
                     <div class="flex justify-center mb-8">
                         <div class="w-48 h-48 rounded-full card-bg p-2 card-glow">
-                            <!-- IMPORTANT: Replace this src with a link to your professional headshot! -->
-                            <img src="https://placehold.co/256x256/0A101A/00E5FF?text=JH" alt="Santhiya Joe Harson J" class="rounded-full w-full h-full object-cover">
+                            <!-- GitHub Profile Picture -->
+                            <img src="https://github.com/joeharson.png" alt="Santhiya Joe Harson J" class="rounded-full w-full h-full object-cover">
                         </div>
                     </div>
                     <p class="text-slate-300 leading-relaxed md:text-lg max-w-3xl mx-auto mb-16">
@@ -706,4 +707,5 @@
     </script>
 </body>
 </html>
+
 
