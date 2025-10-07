@@ -10,37 +10,77 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        :root {
+            --dark-bg: #0A101A;
+            --card-bg: #101826;
+            --accent: #00E5FF;
+            --accent-dark: #00B8CC;
+            --text-light: #E2E8F0;
+            --text-medium: #94A3B8;
+            --border-color: rgba(0, 229, 255, 0.15);
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #050816; /* Midnight Blue */
-            color: #E5E7EB;
+            background-color: var(--dark-bg);
+            color: var(--text-medium);
             overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
         }
-        .main-background {
-             background-image: radial-gradient(circle at 25% 25%, rgba(45, 84, 219, 0.1) 0%, rgba(45, 84, 219, 0) 30%), 
-                               radial-gradient(circle at 75% 75%, rgba(167, 139, 250, 0.1) 0%, rgba(167, 139, 250, 0) 30%);
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
-        .glass-effect {
-            background: rgba(16, 23, 42, 0.6); /* Deeper, less transparent glass */
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+
+        .header-bg {
+            background: rgba(10, 16, 26, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .card-bg {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
         }
         .text-gradient {
-            background: linear-gradient(to right, #3B82F6, #A78BFA); /* Blue to Indigo */
+            background: linear-gradient(to right, var(--accent), #80F2FF);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .button-gradient {
-             background: linear-gradient(to right, #3B82F6, #8B5CF6); /* Blue to a vibrant violet */
+             background: linear-gradient(to right, var(--accent), var(--accent-dark));
         }
         .card-glow {
             transition: box-shadow 0.4s ease, transform 0.4s ease;
-            transform: perspective(1000px);
         }
         .card-glow:hover {
-            transform: translateY(-8px) rotateX(2deg);
-            box-shadow: 0 0 30px rgba(79, 70, 229, 0.2); /* Softer, indigo glow */
+            transform: translateY(-8px);
+            box-shadow: 0 10px 40px rgba(0, 229, 255, 0.25);
         }
+
+        /* Aurora Hover Effect */
+        .card-glow::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(0, 229, 255, 0.15), transparent 30%);
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .card-glow:hover::before {
+            opacity: 1;
+        }
+
         .scroll-reveal {
             opacity: 0;
             transform: translateY(40px);
@@ -51,24 +91,22 @@
             transform: translateY(0);
         }
         
-        /* Typing effect */
         .typing-cursor {
             display: inline-block;
             width: 3px;
             height: 1.5rem;
-            background-color: #A78BFA; /* Indigo cursor */
+            background-color: var(--accent);
             animation: blink 1s infinite;
         }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* Preloader */
         #preloader {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #050816; /* Midnight Blue */
+            background: var(--dark-bg);
             z-index: 9999;
             display: flex;
             justify-content: center;
@@ -77,7 +115,7 @@
         }
         .loader {
             border: 4px solid rgba(255, 255, 255, 0.1);
-            border-left-color: #A78BFA; /* Indigo loader */
+            border-left-color: var(--accent);
             border-radius: 50%;
             width: 50px;
             height: 50px;
@@ -85,7 +123,6 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Back to top button */
         #back-to-top {
             position: fixed;
             bottom: 20px;
@@ -100,38 +137,81 @@
             visibility: visible;
             transform: translateY(0);
         }
+        
+        /* Custom Cursor */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.15s ease-out, width 0.2s ease-out, height 0.2s ease-out;
+        }
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 10000;
+            opacity: 0.5;
+            transition: transform 0.25s ease-out, opacity 0.3s ease-out, width 0.3s ease-out, height 0.3s ease-out;
+        }
+        .cursor-dot.interact {
+            transform: translate(-50%, -50%) scale(0.5);
+        }
+        .cursor-outline.interact {
+            width: 60px;
+            height: 60px;
+            opacity: 0.1;
+        }
+
     </style>
 </head>
 <body class="antialiased">
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <canvas id="particle-canvas"></canvas>
 
     <!-- Preloader -->
     <div id="preloader">
         <div class="loader"></div>
     </div>
 
-    <div class="main-background">
+    <div class="relative z-10">
         <!-- Header -->
-        <header class="fixed top-0 left-0 right-0 z-50 glass-effect">
+        <header class="fixed top-0 left-0 right-0 z-50 header-bg">
             <div class="container mx-auto px-6 py-4 flex justify-between items-center">
                 <h1 class="text-xl font-bold tracking-wider">
                     <a href="#home" class="text-gradient">JOE HARSON</a>
                 </h1>
                 <nav class="hidden md:flex space-x-8 items-center text-sm">
-                    <a href="#about" class="text-gray-300 hover:text-white transition-colors duration-300">About</a>
-                    <a href="#skills" class="text-gray-300 hover:text-white transition-colors duration-300">Skills</a>
-                    <a href="#projects" class="text-gray-300 hover:text-white transition-colors duration-300">Projects</a>
-                    <a href="#contact" class="text-gray-300 hover:text-white transition-colors duration-300">Contact</a>
+                    <a href="#about" class="text-gray-400 hover:text-white transition-colors duration-300">About</a>
+                    <a href="#skills" class="text-gray-400 hover:text-white transition-colors duration-300">Skills</a>
+                    <a href="#projects" class="text-gray-400 hover:text-white transition-colors duration-300">Projects</a>
+                    <a href="#contact" class="text-gray-400 hover:text-white transition-colors duration-300">Contact</a>
                 </nav>
-                <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                <button id="mobile-menu-button" class="md:hidden focus:outline-none text-white">
                      <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
             </div>
             <!-- Mobile Menu -->
-            <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 glass-effect">
-                <a href="#about" class="block py-2 text-gray-300 hover:text-white">About</a>
-                <a href="#skills" class="block py-2 text-gray-300 hover:text-white">Skills</a>
-                <a href="#projects" class="block py-2 text-gray-300 hover:text-white">Projects</a>
-                <a href="#contact" class="block py-2 text-gray-300 hover:text-white">Contact</a>
+            <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 header-bg">
+                <a href="#about" class="block py-2 text-gray-400 hover:text-white">About</a>
+                <a href="#skills" class="block py-2 text-gray-400 hover:text-white">Skills</a>
+                <a href="#projects" class="block py-2 text-gray-400 hover:text-white">Projects</a>
+                <a href="#contact" class="block py-2 text-gray-400 hover:text-white">Contact</a>
             </div>
         </header>
 
@@ -140,17 +220,17 @@
             <!-- Hero Section -->
             <section id="home" class="min-h-screen flex items-center justify-center text-center">
                 <div class="z-10 space-y-8 max-w-4xl">
-                    <h2 class="text-5xl md:text-7xl font-extrabold tracking-tight">
+                    <h2 class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-100">
                         Hi, I'm <span class="text-gradient">Santhiya Joe Harson J</span>
                     </h2>
-                    <h3 class="text-lg md:text-2xl text-gray-300 font-medium">
+                    <h3 class="text-lg md:text-2xl text-slate-300 font-medium">
                         I'm an <span id="typing-text" class="text-gradient font-bold"></span><span class="typing-cursor"></span>
                     </h3>
-                    <p class="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
+                    <p class="text-base md:text-lg text-slate-400 max-w-2xl mx-auto">
                         An AI Engineer crafting intelligent and scalable solutions for the future. I transform complex problems into impactful technology.
                     </p>
                     <div class="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4">
-                         <a href="#projects" class="w-full sm:w-auto px-8 py-3 button-gradient text-white font-semibold rounded-lg shadow-lg hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 transform hover:scale-105">View My Work</a>
+                         <a href="#projects" class="w-full sm:w-auto px-8 py-3 button-gradient text-black font-semibold rounded-lg shadow-[0_0_20px_rgba(0,229,255,0.3)] hover:shadow-[0_0_30px_rgba(0,229,255,0.5)] transition-shadow duration-300 transform hover:scale-105">View My Work</a>
                     </div>
                 </div>
             </section>
@@ -160,39 +240,39 @@
                  <h3 class="text-4xl font-bold text-center mb-16 text-gradient">About Me</h3>
                 <div class="max-w-5xl mx-auto text-center">
                     <div class="flex justify-center mb-8">
-                        <div class="w-48 h-48 rounded-full glass-effect p-2 card-glow">
+                        <div class="w-48 h-48 rounded-full card-bg p-2 card-glow">
                             <!-- IMPORTANT: Replace this src with a link to your professional headshot! -->
-                            <img src="https://placehold.co/256x256/050816/A78BFA?text=JH" alt="Santhiya Joe Harson J" class="rounded-full w-full h-full object-cover">
+                            <img src="https://placehold.co/256x256/0A101A/00E5FF?text=JH" alt="Santhiya Joe Harson J" class="rounded-full w-full h-full object-cover">
                         </div>
                     </div>
-                    <p class="text-gray-300 leading-relaxed md:text-lg max-w-3xl mx-auto mb-16">
+                    <p class="text-slate-300 leading-relaxed md:text-lg max-w-3xl mx-auto mb-16">
                         From Machine Learning and Computer Vision to Generative AI, I am deeply curious about every facet of artificial intelligence. For me, technology isn't just a career—it's a space to experiment, learn, and create solutions that can make a meaningful difference. I thrive on combining my technical skills with a collaborative spirit to build impactful projects.
                     </p>
                     
                     <div class="grid md:grid-cols-3 gap-8 text-left">
                         <!-- Philosophy 1 -->
-                        <div class="glass-effect rounded-xl p-6 card-glow">
+                        <div class="card-bg rounded-xl p-6 card-glow">
                             <div class="flex items-center gap-4 mb-3">
-                                <div class="p-2 glass-effect rounded-full"><i data-lucide="lightbulb" class="w-6 h-6 text-sky-400"></i></div>
-                                <h5 class="font-semibold text-lg text-white">Innovation & Impact</h5>
+                                <div class="p-2 bg-cyan-900/50 rounded-full"><i data-lucide="lightbulb" class="w-6 h-6 text-cyan-300"></i></div>
+                                <h5 class="font-semibold text-lg text-slate-200">Innovation & Impact</h5>
                             </div>
-                            <p class="text-gray-400 text-sm">I focus on solutions that are not just technically advanced, but also deliver tangible, meaningful results.</p>
+                            <p class="text-slate-400 text-sm">I focus on solutions that are not just technically advanced, but also deliver tangible, meaningful results.</p>
                         </div>
                         <!-- Philosophy 2 -->
-                        <div class="glass-effect rounded-xl p-6 card-glow">
+                        <div class="card-bg rounded-xl p-6 card-glow">
                              <div class="flex items-center gap-4 mb-3">
-                                <div class="p-2 glass-effect rounded-full"><i data-lucide="users" class="w-6 h-6 text-sky-400"></i></div>
-                                <h5 class="font-semibold text-lg text-white">Collaborative Growth</h5>
+                                <div class="p-2 bg-cyan-900/50 rounded-full"><i data-lucide="users" class="w-6 h-6 text-cyan-300"></i></div>
+                                <h5 class="font-semibold text-lg text-slate-200">Collaborative Growth</h5>
                             </div>
-                            <p class="text-gray-400 text-sm">I believe the best ideas are born from teamwork and enjoy sharing knowledge to innovate together.</p>
+                            <p class="text-slate-400 text-sm">I believe the best ideas are born from teamwork and enjoy sharing knowledge to innovate together.</p>
                         </div>
                         <!-- Philosophy 3 -->
-                        <div class="glass-effect rounded-xl p-6 card-glow">
+                        <div class="card-bg rounded-xl p-6 card-glow">
                             <div class="flex items-center gap-4 mb-3">
-                                <div class="p-2 glass-effect rounded-full"><i data-lucide="book-open-check" class="w-6 h-6 text-sky-400"></i></div>
-                                <h5 class="font-semibold text-lg text-white">Continuous Learning</h5>
+                                <div class="p-2 bg-cyan-900/50 rounded-full"><i data-lucide="book-open-check" class="w-6 h-6 text-cyan-300"></i></div>
+                                <h5 class="font-semibold text-lg text-slate-200">Continuous Learning</h5>
                             </div>
-                            <p class="text-gray-400 text-sm">For me, technology is a playground for discovery. I'm always seeking new challenges to expand my skills.</p>
+                            <p class="text-slate-400 text-sm">For me, technology is a playground for discovery. I'm always seeking new challenges to expand my skills.</p>
                         </div>
                     </div>
                 </div>
@@ -203,44 +283,44 @@
                 <h3 class="text-4xl font-bold text-center mb-16 text-gradient">Core Competencies</h3>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 max-w-5xl mx-auto text-center">
                     <!-- Skill Item -->
-                    <div class="flex flex-col items-center gap-3 opacity-80 hover:opacity-100 transform hover:scale-110 transition-all duration-300">
-                        <div class="w-20 h-20 glass-effect rounded-full flex items-center justify-center"><i data-lucide="brain-circuit" class="w-10 h-10 text-sky-400"></i></div>
+                    <div class="flex flex-col items-center gap-3 text-slate-300 hover:text-white transform hover:scale-110 transition-all duration-300">
+                        <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="brain-circuit" class="w-10 h-10 text-cyan-400"></i></div>
                         <span class="font-medium">Machine Learning</span>
                     </div>
-                    <div class="flex flex-col items-center gap-3 opacity-80 hover:opacity-100 transform hover:scale-110 transition-all duration-300">
-                        <div class="w-20 h-20 glass-effect rounded-full flex items-center justify-center"><i data-lucide="layers" class="w-10 h-10 text-sky-400"></i></div>
+                    <div class="flex flex-col items-center gap-3 text-slate-300 hover:text-white transform hover:scale-110 transition-all duration-300">
+                        <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="layers" class="w-10 h-10 text-cyan-400"></i></div>
                         <span class="font-medium">Deep Learning</span>
                     </div>
-                    <div class="flex flex-col items-center gap-3 opacity-80 hover:opacity-100 transform hover:scale-110 transition-all duration-300">
-                         <div class="w-20 h-20 glass-effect rounded-full flex items-center justify-center"><i data-lucide="camera" class="w-10 h-10 text-sky-400"></i></div>
+                    <div class="flex flex-col items-center gap-3 text-slate-300 hover:text-white transform hover:scale-110 transition-all duration-300">
+                         <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="camera" class="w-10 h-10 text-cyan-400"></i></div>
                         <span class="font-medium">Computer Vision</span>
                     </div>
-                    <div class="flex flex-col items-center gap-3 opacity-80 hover:opacity-100 transform hover:scale-110 transition-all duration-300">
-                         <div class="w-20 h-20 glass-effect rounded-full flex items-center justify-center"><i data-lucide="message-circle" class="w-10 h-10 text-sky-400"></i></div>
+                    <div class="flex flex-col items-center gap-3 text-slate-300 hover:text-white transform hover:scale-110 transition-all duration-300">
+                         <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="message-circle" class="w-10 h-10 text-cyan-400"></i></div>
                         <span class="font-medium">NLP</span>
                     </div>
-                    <div class="flex flex-col items-center gap-3 opacity-80 hover:opacity-100 transform hover:scale-110 transition-all duration-300">
-                         <div class="w-20 h-20 glass-effect rounded-full flex items-center justify-center"><i data-lucide="sparkles" class="w-10 h-10 text-sky-400"></i></div>
+                    <div class="flex flex-col items-center gap-3 text-slate-300 hover:text-white transform hover:scale-110 transition-all duration-300">
+                         <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="sparkles" class="w-10 h-10 text-cyan-400"></i></div>
                         <span class="font-medium">Generative AI</span>
                     </div>
-                     <div class="flex flex-col items-center gap-3 opacity-80 hover:opacity-100 transform hover:scale-110 transition-all duration-300">
-                         <div class="w-20 h-20 glass-effect rounded-full flex items-center justify-center"><i data-lucide="code" class="w-10 h-10 text-purple-400"></i></div>
+                     <div class="flex flex-col items-center gap-3 text-slate-300 hover:text-white transform hover:scale-110 transition-all duration-300">
+                         <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="code" class="w-10 h-10 text-cyan-400"></i></div>
                         <span class="font-medium">Python</span>
                     </div>
-                     <div class="flex flex-col items-center gap-3 opacity-80 hover:opacity-100 transform hover:scale-110 transition-all duration-300">
-                         <div class="w-20 h-20 glass-effect rounded-full flex items-center justify-center"><i data-lucide="box" class="w-10 h-10 text-purple-400"></i></div>
+                     <div class="flex flex-col items-center gap-3 text-slate-300 hover:text-white transform hover:scale-110 transition-all duration-300">
+                         <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="box" class="w-10 h-10 text-cyan-400"></i></div>
                         <span class="font-medium">TensorFlow</span>
                     </div>
-                    <div class="flex flex-col items-center gap-3 opacity-80 hover:opacity-100 transform hover:scale-110 transition-all duration-300">
-                         <div class="w-20 h-20 glass-effect rounded-full flex items-center justify-center"><i data-lucide="database" class="w-10 h-10 text-purple-400"></i></div>
+                    <div class="flex flex-col items-center gap-3 text-slate-300 hover:text-white transform hover:scale-110 transition-all duration-300">
+                         <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="database" class="w-10 h-10 text-cyan-400"></i></div>
                         <span class="font-medium">Data Analytics</span>
                     </div>
-                    <div class="flex flex-col items-center gap-3 opacity-80 hover:opacity-100 transform hover:scale-110 transition-all duration-300">
-                         <div class="w-20 h-20 glass-effect rounded-full flex items-center justify-center"><i data-lucide="users" class="w-10 h-10 text-indigo-400"></i></div>
+                    <div class="flex flex-col items-center gap-3 text-slate-300 hover:text-white transform hover:scale-110 transition-all duration-300">
+                         <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="users" class="w-10 h-10 text-cyan-400"></i></div>
                         <span class="font-medium">Team Leadership</span>
                     </div>
-                    <div class="flex flex-col items-center gap-3 opacity-80 hover:opacity-100 transform hover:scale-110 transition-all duration-300">
-                         <div class="w-20 h-20 glass-effect rounded-full flex items-center justify-center"><i data-lucide="mic" class="w-10 h-10 text-indigo-400"></i></div>
+                    <div class="flex flex-col items-center gap-3 text-slate-300 hover:text-white transform hover:scale-110 transition-all duration-300">
+                         <div class="w-20 h-20 card-bg rounded-full flex items-center justify-center"><i data-lucide="mic" class="w-10 h-10 text-cyan-400"></i></div>
                         <span class="font-medium">Public Speaking</span>
                     </div>
                 </div>
@@ -251,73 +331,73 @@
                 <h3 class="text-4xl font-bold text-center mb-16 text-gradient">My Projects</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Project Card Template -->
-                    <div class="glass-effect rounded-xl overflow-hidden card-glow flex flex-col group">
+                    <div class="card-bg rounded-xl overflow-hidden card-glow flex flex-col group">
                         <div class="p-6 flex-grow">
-                            <h4 class="font-bold text-xl mb-3 text-white">Sign Language Detection</h4>
-                            <p class="text-gray-400 text-sm flex-grow">A computer vision project to recognize and translate sign language gestures in real-time.</p>
+                            <h4 class="font-bold text-xl mb-3 text-slate-200">Sign Language Detection</h4>
+                            <p class="text-slate-400 text-sm flex-grow">A computer vision project to recognize and translate sign language gestures in real-time.</p>
                         </div>
                         <div class="px-6 py-4">
                             <div class="flex flex-wrap gap-2 text-xs mb-4">
-                                <span class="bg-sky-900/50 text-sky-300 px-2 py-1 rounded">Computer Vision</span>
-                                <span class="bg-purple-900/50 text-purple-300 px-2 py-1 rounded">Python</span>
-                                <span class="bg-indigo-900/50 text-indigo-300 px-2 py-1 rounded">TensorFlow</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">Computer Vision</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">Python</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">TensorFlow</span>
                             </div>
-                             <a href="https://github.com/joeharson/sign-language-detection-S4" target="_blank" class="inline-flex items-center font-semibold text-sm text-sky-400 hover:text-sky-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                             <a href="https://github.com/joeharson/sign-language-detection-S4" target="_blank" class="inline-flex items-center font-semibold text-sm text-cyan-400 hover:text-cyan-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 View on GitHub <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                             </a>
                         </div>
                     </div>
                     
-                    <div class="glass-effect rounded-xl overflow-hidden card-glow flex flex-col group">
+                    <div class="card-bg rounded-xl overflow-hidden card-glow flex flex-col group">
                         <div class="p-6 flex-grow">
-                            <h4 class="font-bold text-xl mb-3 text-white">SOUNDFLOW AI</h4>
-                            <p class="text-gray-400 text-sm flex-grow">An AI-powered application for sound analysis and processing.</p>
+                            <h4 class="font-bold text-xl mb-3 text-slate-200">SOUNDFLOW AI</h4>
+                            <p class="text-slate-400 text-sm flex-grow">An AI-powered application for sound analysis and processing.</p>
                         </div>
                         <div class="px-6 py-4">
                             <div class="flex flex-wrap gap-2 text-xs mb-4">
-                                <span class="bg-sky-900/50 text-sky-300 px-2 py-1 rounded">Audio Processing</span>
-                                <span class="bg-purple-900/50 text-purple-300 px-2 py-1 rounded">Python</span>
-                                 <span class="bg-indigo-900/50 text-indigo-300 px-2 py-1 rounded">Librosa</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">Audio Processing</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">Python</span>
+                                 <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">Librosa</span>
                             </div>
-                             <a href="https://github.com/joeharson/SOUNDFLOW-AI" target="_blank" class="inline-flex items-center font-semibold text-sm text-sky-400 hover:text-sky-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                             <a href="https://github.com/joeharson/SOUNDFLOW-AI" target="_blank" class="inline-flex items-center font-semibold text-sm text-cyan-400 hover:text-cyan-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 View on GitHub <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                             </a>
                         </div>
                     </div>
 
-                     <div class="glass-effect rounded-xl overflow-hidden card-glow flex flex-col group">
+                     <div class="card-bg rounded-xl overflow-hidden card-glow flex flex-col group">
                         <div class="p-6 flex-grow">
-                            <h4 class="font-bold text-xl mb-3 text-white">KCT Chatbot</h4>
-                            <p class="text-gray-400 text-sm flex-grow">A conversational AI chatbot developed for Kumaraguru College of Technology.</p>
+                            <h4 class="font-bold text-xl mb-3 text-slate-200">KCT Chatbot</h4>
+                            <p class="text-slate-400 text-sm flex-grow">A conversational AI chatbot developed for Kumaraguru College of Technology.</p>
                         </div>
                         <div class="px-6 py-4">
                             <div class="flex flex-wrap gap-2 text-xs mb-4">
-                                <span class="bg-sky-900/50 text-sky-300 px-2 py-1 rounded">NLP</span>
-                                <span class="bg-purple-900/50 text-purple-300 px-2 py-1 rounded">Dialogflow</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">NLP</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">Dialogflow</span>
                             </div>
-                             <a href="https://github.com/joeharson/kct-chatbot" target="_blank" class="inline-flex items-center font-semibold text-sm text-sky-400 hover:text-sky-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                             <a href="https://github.com/joeharson/kct-chatbot" target="_blank" class="inline-flex items-center font-semibold text-sm text-cyan-400 hover:text-cyan-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 View on GitHub <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                             </a>
                         </div>
                     </div>
 
                     <!-- Project Card 4 -->
-                    <div class="glass-effect rounded-xl overflow-hidden card-glow flex flex-col group">
+                    <div class="card-bg rounded-xl overflow-hidden card-glow flex flex-col group">
                         <div class="p-6 flex-grow">
-                            <h4 class="font-bold text-xl mb-3 text-white">GIE Rubrics for Forge Analytic</h4>
-                            <p class="text-gray-400 text-sm flex-grow">A rubric system for the Forge Analytic Platform to standardize evaluations.</p>
+                            <h4 class="font-bold text-xl mb-3 text-slate-200">GIE Rubrics for Forge Analytic</h4>
+                            <p class="text-slate-400 text-sm flex-grow">A rubric system for the Forge Analytic Platform to standardize evaluations.</p>
                         </div>
                         <div class="px-6 py-4">
                             <div class="flex flex-wrap gap-2 text-xs mb-4">
-                                <span class="bg-sky-900/50 text-sky-300 px-2 py-1 rounded">Web App</span>
-                                <span class="bg-purple-900/50 text-purple-300 px-2 py-1 rounded">Analytics</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">Web App</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">Analytics</span>
                             </div>
                             <div class="flex items-center space-x-6 pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <a href="https://github.com/joeharson/forge-project-1" target="_blank" class="inline-flex items-center font-semibold text-sm text-gray-300 hover:text-white">
+                                <a href="https://github.com/joeharson/forge-project-1" target="_blank" class="inline-flex items-center font-semibold text-sm text-slate-400 hover:text-white">
                                     GitHub
                                     <i data-lucide="github" class="w-4 h-4 ml-2"></i>
                                 </a>
-                                <a href="https://techrouters.netlify.app/homepage.html" target="_blank" class="inline-flex items-center font-semibold text-sm text-sky-400 hover:text-sky-300">
+                                <a href="https://techrouters.netlify.app/homepage.html" target="_blank" class="inline-flex items-center font-semibold text-sm text-cyan-400 hover:text-cyan-200">
                                     Live Demo
                                     <i data-lucide="play-circle" class="w-4 h-4 ml-2"></i>
                                 </a>
@@ -326,34 +406,34 @@
                     </div>
 
                     <!-- Project Card 5 -->
-                    <div class="glass-effect rounded-xl overflow-hidden card-glow flex flex-col group">
+                    <div class="card-bg rounded-xl overflow-hidden card-glow flex flex-col group">
                         <div class="p-6 flex-grow">
-                            <h4 class="font-bold text-xl mb-3 text-white">Smart Recruitment Platform</h4>
-                            <p class="text-gray-400 text-sm flex-grow">An intelligent platform to streamline and automate the recruitment process.</p>
+                            <h4 class="font-bold text-xl mb-3 text-slate-200">Smart Recruitment Platform</h4>
+                            <p class="text-slate-400 text-sm flex-grow">An intelligent platform to streamline and automate the recruitment process.</p>
                         </div>
                         <div class="px-6 py-4">
                             <div class="flex flex-wrap gap-2 text-xs mb-4">
-                                <span class="bg-sky-900/50 text-sky-300 px-2 py-1 rounded">AI Platform</span>
-                                <span class="bg-purple-900/50 text-purple-300 px-2 py-1 rounded">HR Tech</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">AI Platform</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">HR Tech</span>
                             </div>
-                            <a href="https://github.com/joeharson/SmartRecruitment" target="_blank" class="inline-flex items-center font-semibold text-sm text-sky-400 hover:text-sky-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <a href="https://github.com/joeharson/SmartRecruitment" target="_blank" class="inline-flex items-center font-semibold text-sm text-cyan-400 hover:text-cyan-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 View on GitHub <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                             </a>
                         </div>
                     </div>
 
                     <!-- Project Card 6 -->
-                    <div class="glass-effect rounded-xl overflow-hidden card-glow flex flex-col group">
+                    <div class="card-bg rounded-xl overflow-hidden card-glow flex flex-col group">
                         <div class="p-6 flex-grow">
-                            <h4 class="font-bold text-xl mb-3 text-white">Rideable</h4>
-                            <p class="text-gray-400 text-sm flex-grow">A ride-sharing or transportation-focused application project.</p>
+                            <h4 class="font-bold text-xl mb-3 text-slate-200">Rideable</h4>
+                            <p class="text-slate-400 text-sm flex-grow">A ride-sharing or transportation-focused application project.</p>
                         </div>
                         <div class="px-6 py-4">
                             <div class="flex flex-wrap gap-2 text-xs mb-4">
-                                <span class="bg-sky-900/50 text-sky-300 px-2 py-1 rounded">Web App</span>
-                                <span class="bg-purple-900/50 text-purple-300 px-2 py-1 rounded">Firebase</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">Web App</span>
+                                <span class="bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded">Firebase</span>
                             </div>
-                            <a href="https://github.com/joeharson/Rideable" target="_blank" class="inline-flex items-center font-semibold text-sm text-sky-400 hover:text-sky-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <a href="https://github.com/joeharson/Rideable" target="_blank" class="inline-flex items-center font-semibold text-sm text-cyan-400 hover:text-cyan-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 View on GitHub <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                             </a>
                         </div>
@@ -364,37 +444,37 @@
         </main>
 
         <!-- Footer -->
-        <footer id="contact" class="border-t border-slate-900 scroll-reveal">
+        <footer id="contact" class="border-t border-slate-800 scroll-reveal">
             <div class="container mx-auto px-6 py-20 text-center">
                 <h3 class="text-4xl font-bold mb-4 text-gradient">Let's Build Together</h3>
-                <p class="text-gray-400 mb-8 max-w-xl mx-auto">
+                <p class="text-slate-400 mb-8 max-w-xl mx-auto">
                     I'm currently seeking new opportunities and am open to collaborations. Feel free to reach out if you have a project in mind or just want to connect.
                 </p>
-                <a href="mailto:joeharsonj18@gmail.com" class="inline-block px-8 py-4 button-gradient text-white font-semibold rounded-lg shadow-lg hover:shadow-2xl hover:shadow-indigo-500/20 transition-shadow duration-300 transform hover:scale-105">
+                <a href="mailto:joeharsonj18@gmail.com" class="inline-block px-8 py-4 button-gradient text-black font-semibold rounded-lg shadow-[0_0_20px_rgba(0,229,255,0.3)] hover:shadow-[0_0_30px_rgba(0,229,255,0.5)] transition-shadow duration-300 transform hover:scale-105">
                     Say Hello
                 </a>
                 <div class="flex justify-center space-x-6 mt-10">
-                    <a href="https://github.com/joeharson" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-300">
+                    <a href="https://github.com/joeharson" target="_blank" class="text-gray-500 hover:text-white transition-colors duration-300">
                         <i data-lucide="github" class="w-6 h-6"></i>
                     </a>
-                    <a href="https://www.linkedin.com/in/santhiya-joe-harson-j-41602a291" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-300">
+                    <a href="https://www.linkedin.com/in/santhiya-joe-harson-j-41602a291" target="_blank" class="text-gray-500 hover:text-white transition-colors duration-300">
                         <i data-lucide="linkedin" class="w-6 h-6"></i>
                     </a>
                 </div>
-                <p class="text-gray-600 text-sm mt-12">&copy; 2024 Santhiya Joe Harson J. Crafted with passion.</p>
+                <p class="text-gray-500 text-sm mt-12">&copy; 2024 Santhiya Joe Harson J. Crafted with passion.</p>
             </div>
         </footer>
     </div>
     
     <!-- Back to Top Button -->
-    <a href="#home" id="back-to-top" class="p-3 glass-effect rounded-full text-white hover:bg-slate-800 transition-all duration-300">
+    <a href="#home" id="back-to-top" class="p-3 card-bg rounded-full text-white hover:bg-slate-700 transition-all duration-300">
         <i data-lucide="arrow-up" class="w-5 h-5"></i>
     </a>
 
     <script>
         lucide.createIcons();
 
-        // Preloader
+        // --- PRELOADER ---
         window.addEventListener('load', () => {
             const preloader = document.getElementById('preloader');
             preloader.style.opacity = '0';
@@ -403,34 +483,141 @@
             }, 500);
         });
 
-        // Mobile menu toggle
+        // --- CUSTOM CURSOR ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        window.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+            cursorOutline.style.left = e.clientX + 'px';
+            cursorOutline.style.top = e.clientY + 'px';
+        });
+
+        document.querySelectorAll('a, button, [data-lucide]').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorDot.classList.add('interact');
+                cursorOutline.classList.add('interact');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorDot.classList.remove('interact');
+                cursorOutline.classList.remove('interact');
+            });
+        });
+
+        // --- PARTICLE BACKGROUND ---
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.1) this.size -= 0.01;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(0, 229, 255, 0.5)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const numberOfParticles = (canvas.width * canvas.height) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            connectParticles();
+            requestAnimationFrame(animateParticles);
+        }
+
+        function connectParticles() {
+            let opacityValue = 1;
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a; b < particles.length; b++) {
+                    const dx = particles[a].x - particles[b].x;
+                    const dy = particles[a].y - particles[b].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        opacityValue = 1 - (distance/100);
+                        ctx.strokeStyle = `rgba(0, 229, 255, ${opacityValue})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        resizeCanvas();
+        initParticles();
+        animateParticles();
+        
+        // --- AURORA CARD EFFECT ---
+        document.querySelectorAll('.card-glow').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // --- MOBILE MENU ---
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
         mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
 
-        // Smooth scroll for navigation links & close menu
+        // --- SMOOTH SCROLL ---
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 const href = this.getAttribute('href');
-                if (href === '#') {
-                    e.preventDefault();
-                    return;
-                }
-                
+                if (href === '#') { e.preventDefault(); return; }
                 e.preventDefault();
                 const target = document.querySelector(href);
-                if(target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
+                if(target) { target.scrollIntoView({ behavior: 'smooth' }); }
                 if (this.id !== 'back-to-top' && !mobileMenu.classList.contains('hidden')) {
                     mobileMenu.classList.add('hidden');
                 }
             });
         });
 
-        // Scroll reveal animation
+        // --- SCROLL REVEAL ---
         const revealElements = document.querySelectorAll('.scroll-reveal');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -442,7 +629,7 @@
         }, { threshold: 0.1 });
         revealElements.forEach(el => observer.observe(el));
         
-        // Typing effect
+        // --- TYPING EFFECT ---
         const typingTextElement = document.getElementById('typing-text');
         const words = ["AI Engineer", "Deep Learning Specialist", "Problem Solver", "Tech Innovator"];
         let wordIndex = 0;
@@ -452,26 +639,21 @@
         function type() {
             const currentWord = words[wordIndex];
             const currentChar = isDeleting ? currentWord.substring(0, charIndex - 1) : currentWord.substring(0, charIndex + 1);
-            
             typingTextElement.textContent = currentChar;
             
             if (!isDeleting && charIndex < currentWord.length) {
-                charIndex++;
-                setTimeout(type, 150);
+                charIndex++; setTimeout(type, 150);
             } else if (isDeleting && charIndex > 0) {
-                charIndex--;
-                setTimeout(type, 100);
+                charIndex--; setTimeout(type, 100);
             } else {
                 isDeleting = !isDeleting;
-                if (!isDeleting) {
-                    wordIndex = (wordIndex + 1) % words.length;
-                }
+                if (!isDeleting) { wordIndex = (wordIndex + 1) % words.length; }
                 setTimeout(type, 1200);
             }
         }
         document.addEventListener('DOMContentLoaded', type);
 
-        // Back to top button
+        // --- BACK TO TOP BUTTON ---
         const backToTopButton = document.getElementById('back-to-top');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 300) {
@@ -480,9 +662,7 @@
                 backToTopButton.classList.remove('show');
             }
         });
-
     </script>
 </body>
 </html>
-
 
